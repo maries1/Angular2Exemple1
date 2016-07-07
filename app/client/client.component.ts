@@ -9,7 +9,7 @@ import { ClientService } from '../service';
 
 })
 
-export class ClientDetailComponent {
+export class ClientDetailComponent implements OnInit{
     private _listeClients: Client[];
     private _clientService: ClientService;
     private _indiceEnCours: number;
@@ -24,12 +24,13 @@ export class ClientDetailComponent {
     submitted = false;
 
     ngOnInit() {
-        //this._listeClients = this._clientService.getClients();
-        this._clientService.getClients()
+        this._listeClients = this._clientService.getClients();
+        this.setEncours(0);
+        /*this._clientService.getClients()
             .then(clients => {
                 this._listeClients = clients;
                 this.setEncours(0);
-                });
+                });*/
     }
 
     onSubmit() {
@@ -44,7 +45,7 @@ export class ClientDetailComponent {
     active = true;
 
     private ajouterClient() {
-        this.enrClient = new Client(-1, '', '', 0, 0);
+        this.enrClient = new Client(-1, '', '', 0, 0, 0, '');
         this.active = false;
         setTimeout(() => this.active = true, 0);
         this._indiceEnCours = this._listeClients.push(this.enrClient) - 1;
@@ -56,6 +57,14 @@ export class ClientDetailComponent {
         if (this._indiceEnCours > 0)
             this._indiceEnCours--;
         this.setEncours(this._indiceEnCours);
+    }
+
+    private supprimerTousClients() {
+        let rep =prompt("vous étes sûr? O ou N?");
+        if(rep === 'O' || rep === 'o'){
+            this._listeClients.splice(0);
+            this.enrClient = new Client(-1, '', '', 0, 0, 0, '');
+        }
     }
 
     private setEncours(ind: number): void {
